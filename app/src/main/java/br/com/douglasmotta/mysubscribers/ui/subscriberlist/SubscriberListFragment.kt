@@ -21,7 +21,7 @@ class SubscriberListFragment : Fragment(R.layout.subscriber_list_fragment) {
             )
         )
 
-        recycler_subscribers.run {
+        with(recycler_subscribers) {
             setHasFixedSize(true)
             adapter = subscriberListAdapter
         }
