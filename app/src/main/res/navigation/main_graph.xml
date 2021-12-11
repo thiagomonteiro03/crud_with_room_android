@@ -3,16 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/subscriberFragment">
+    app:startDestination="@id/subscriberListFragment">
 
     <fragment
         android:id="@+id/subscriberFragment"
         android:name="br.com.douglasmotta.mysubscribers.ui.subscriber.SubscriberFragment"
         android:label="@string/subscriber_title"
-        tools:layout="@layout/subscriber_fragment" />
+        tools:layout="@layout/subscriber_fragment" >
+        <argument
+            android:name="subscriber"
+            android:defaultValue="@null"
+            app:argType="br.com.douglasmotta.mysubscribers.data.db.entity.SubscriberEntity"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/subscriberListFragment"
         android:name="br.com.douglasmotta.mysubscribers.ui.subscriberlist.SubscriberListFragment"
         android:label="@string/subscriber_list_title"
-        tools:layout="@layout/subscriber_list_fragment" />
+        tools:layout="@layout/subscriber_list_fragment" >
+        <action
+            android:id="@+id/action_subscriberListFragment_to_subscriberFragment"
+            app:destination="@id/subscriberFragment" />
+    </fragment>
 </navigation>

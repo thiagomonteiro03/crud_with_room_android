@@ -22,5 +22,5 @@ interface SubscriberDao {
     suspend fun deleteAll()
 
     @Query("SELECT * FROM subscriber")
-    fun getAll(): LiveData<List<SubscriberEntity>>
+    suspend fun getAll(): List<SubscriberEntity>
 }

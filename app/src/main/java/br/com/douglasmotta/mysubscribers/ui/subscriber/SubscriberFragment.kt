@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import br.com.douglasmotta.mysubscribers.R
 import br.com.douglasmotta.mysubscribers.data.db.AppDataBase
 import br.com.douglasmotta.mysubscribers.data.db.SubscriberDao
@@ -30,8 +32,16 @@ class SubscriberFragment : Fragment(R.layout.subscriber_fragment) {
         }
     }
 
+    private val args: SubscriberFragmentArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        args.subscriber?.let {
+            button_subscriber.text = getString(R.string.subscriber_button_update)
+            input_name.setText(it.name)
+            input_email.setText(it.email)
+        }
 
         observeEvents()
         setListeners()
@@ -40,9 +50,18 @@ class SubscriberFragment : Fragment(R.layout.subscriber_fragment) {
     private fun observeEvents() {
         viewModel.subscriberStateEventData.observe(viewLifecycleOwner) {
             when(it){
-                is SubscriberViewModel.SubscriberState.Inserted ->{
+                is SubscriberViewModel.SubscriberState.Inserted -> {
                     clearFields()
                     hideKeyboard()
+                    requireView().requestFocus()
+
+                    findNavController().popBackStack()
+                }
+                is SubscriberViewModel.SubscriberState.Updated -> {
+                    clearFields()
+                    hideKeyboard()
+
+                    findNavController().popBackStack()
                 }
             }
         }
@@ -69,7 +88,7 @@ class SubscriberFragment : Fragment(R.layout.subscriber_fragment) {
             val name = input_name.text.toString()
             val email = input_email.text.toString()
 
-            viewModel.addSubscriber(name, email)
+            viewModel.addOrUpdateSubscriber(name, email, args.subscriber?.id ?: 0)
         }
     }
 }
